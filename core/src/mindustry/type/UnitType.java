@@ -1654,6 +1654,9 @@ public class UnitType extends UnlockableContent implements LogicSenseable{
             case itemCapacity -> itemCapacity;
             case speed -> speed * 60f / tilesize;
             case payloadCapacity -> sample instanceof Payloadc ? payloadCapacity / tilePayload : 0f;
+            case patched -> state.data.isPatched(this) ? 1f : 0f;
+            case naval -> sample instanceof WaterMovec ? 1f : 0f;
+            case buildSpeed -> buildSpeed;
             case id -> getLogicId();
             default -> Double.NaN;
         };
@@ -1662,6 +1665,7 @@ public class UnitType extends UnlockableContent implements LogicSenseable{
     @Override
     public Object senseObject(LogicProp sensor){
         if(sensor == LogicProp.name) return name;
+        if(sensor == LogicProp.displayName) return localizedName;
         return noSensed;
     }
 

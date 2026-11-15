@@ -148,12 +148,14 @@ public class Item extends UnlockableContent implements LogicSenseable{
     public double sense(LogicProp sensor){
         if(sensor == LogicProp.color) return color.toDoubleBits();
         if(sensor == LogicProp.id) return getLogicId();
+        if(sensor == LogicProp.patched) return state.data.isPatched(this) ? 1f : 0f;
         return Float.NaN;
     }
 
     @Override
     public Object senseObject(LogicProp sensor){
         if(sensor == LogicProp.name) return name;
+        if(sensor == LogicProp.displayName) return localizedName;
         return noSensed;
     }
 

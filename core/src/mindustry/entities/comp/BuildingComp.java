@@ -2167,6 +2167,7 @@ abstract class BuildingComp implements Posc, Teamc, Healthc, Buildingc, QuadTree
             case firstItem -> items == null ? null : items.first();
             case config -> block.configSenseable() ? config() : null;
             case payloadType -> getPayload() instanceof UnitPayload p1 ? p1.unit.type : getPayload() instanceof BuildPayload p2 ? p2.block() : null;
+            case firstPayload -> getPayload() instanceof UnitPayload p1 ? p1.unit : getPayload() instanceof BuildPayload p2 ? p2.build : null;
             default -> noSensed;
         };
     }

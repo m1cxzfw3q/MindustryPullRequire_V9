@@ -64,13 +64,22 @@ public enum LogicProp{
     type,
     flag,
     flying,
+    naval,
+    damageMultiplier,
+    healthMultiplier,
+    reloadMultiplier,
+    buildSpeedMultiplier,
+    buildSpeed,
     controlled,
     controller,
     name,
+    displayName,
+    patched,
     payloadCount,
     payloadType,
     totalPayload,
     payloadCapacity,
+    firstPayload,
     maxUnits,
     id,
     selectedBlock,
@@ -96,7 +105,7 @@ public enum LogicProp{
         senseable = Seq.select(all, t -> t.params.length <= 1 && !privilegedAccess.contains(t)).toArray(LogicProp.class),
         senseablePrivileged = Seq.select(all, t -> t.params.length <= 1).toArray(LogicProp.class),
         controls = Seq.select(all, t -> t.params.length > 0).toArray(LogicProp.class),
-        settable = {x, y, velocityX, velocityY, rotation, speed, armor, health, shield, team, flag, totalPower, payloadType, bulletTime, bulletLifetime};
+        settable = {x, y, velocityX, velocityY, rotation, speed, armor, health, shield, damageMultiplier, healthMultiplier, reloadMultiplier, buildSpeedMultiplier, buildSpeed, team, flag, totalPower, payloadType, bulletTime, bulletLifetime};
 
     static{
         privilegedAccess.each(l -> l.privileged = privilegedAccess.contains(l));

@@ -3,6 +3,7 @@ package mindustry.entities.bullet;
 import arc.math.geom.*;
 import arc.util.*;
 import mindustry.*;
+import mindustry.content.Fx;
 import mindustry.entities.*;
 import mindustry.gen.*;
 
@@ -11,6 +12,7 @@ public class PointBulletType extends BulletType{
      private static Unit result;
 
      public float trailSpacing = 10f;
+     public Effect lineEffect = Fx.none;
 
      public PointBulletType(){
          scaleLife = true;
@@ -31,6 +33,10 @@ public class PointBulletType extends BulletType{
         Geometry.iterateLine(0f, b.x, b.y, px, py, trailSpacing, (x, y) -> {
             trailEffect.at(x, y, rot);
         });
+
+        if(lineEffect != Fx.none){
+            lineEffect.at(b.x, b.y, rot, hitColor, new Vec2(px, py));
+        }
 
         b.time = b.lifetime;
         b.set(px, py);
@@ -65,6 +71,7 @@ public class PointBulletType extends BulletType{
             }
         }
 
+        despawnEffect.at(b.x, b.y, rot, hitColor);
         b.remove();
 
         b.vel.setZero();

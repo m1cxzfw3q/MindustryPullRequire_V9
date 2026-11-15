@@ -403,6 +403,14 @@ public class Turret extends ReloadTurret{
         }
 
         @Override
+        public Object senseObject(LogicProp sensor) {
+            return switch(sensor){
+                case name -> unit.getPlayer();
+                default -> super.senseObject(sensor);
+            };
+        }
+
+        @Override
         public float fogRadius(){
             return (range + (hasAmmo() ? peekAmmo().rangeChange : 0f)) / tilesize * fogRadiusMultiplier;
         }

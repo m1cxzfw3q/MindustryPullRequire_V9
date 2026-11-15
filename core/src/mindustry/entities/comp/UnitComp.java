@@ -37,7 +37,7 @@ abstract class UnitComp implements Healthc, Physicsc, Hitboxc, Statusc, Teamc, I
     static final float warpDst = 8f;
 
     @Import boolean dead, disarmed;
-    @Import float x, y, rotation, maxHealth, drag, armor, hitSize, health, shield, dragMultiplier, armorOverride, speedMultiplier;
+    @Import float x, y, rotation, maxHealth, drag, armor, hitSize, health, shield, dragMultiplier, armorOverride, speedMultiplier, buildSpeedMultiplier, damageMultiplier, reloadMultiplier, healthMultiplier;
     @Import Team team;
     @Import int id;
     @Import @Nullable Tile mineTile;
@@ -293,6 +293,11 @@ abstract class UnitComp implements Healthc, Physicsc, Hitboxc, Statusc, Teamc, I
             case armor -> armorOverride >= 0f ? armorOverride : armor;
             case flag -> flag;
             case speed -> type.speed * 60f / tilesize * speedMultiplier;
+            case reloadMultiplier -> reloadMultiplier;
+            case healthMultiplier -> healthMultiplier;
+            case buildSpeedMultiplier -> buildSpeedMultiplier;
+            case damageMultiplier -> damageMultiplier;
+            case buildSpeed -> type.buildSpeed * buildSpeedMultiplier;
             case controlled -> !isValid() ? 0 :
                     controller instanceof LogicAI ? ctrlProcessor :
                     controller instanceof Player ? ctrlPlayer :
@@ -306,6 +311,8 @@ abstract class UnitComp implements Healthc, Physicsc, Hitboxc, Statusc, Teamc, I
             case selectedRotation -> controller instanceof Player p ? p.selectedRotation : 0;
             case pingX -> controller instanceof Player p && p.isPinging() ? World.conv(p.pingX) : NaN;
             case pingY -> controller instanceof Player p && p.isPinging() ? World.conv(p.pingY) : NaN;
+            case patched -> state.data.isPatched(type) ? 1f : 0f;
+            case naval -> this instanceof WaterMovec ? 1f : 0f;
             default -> NaN;
         };
     }
@@ -315,6 +322,7 @@ abstract class UnitComp implements Healthc, Physicsc, Hitboxc, Statusc, Teamc, I
         return switch(sensor){
             case type -> type;
             case name -> controller instanceof Player p ? p.name : null;
+            case displayName -> type.localizedName;
             case firstItem -> stack().amount == 0 ? null : item();
             case controller -> !isValid() ? null : controller instanceof LogicAI log ? log.controller : this;
             case payloadType -> ((Object)this) instanceof Payloadc pay ?
@@ -325,6 +333,10 @@ abstract class UnitComp implements Healthc, Physicsc, Hitboxc, Statusc, Teamc, I
             case breaking -> isBuilding() && buildPlan().breaking ? buildPlan().tile().build : null;
             case selectedBlock -> controller instanceof Player p ? p.selectedBlock : null;
             case pingText -> controller instanceof Player p && p.isPinging() ? p.pingText : null;
+            case firstPayload -> ((Object)this) instanceof Payloadc pay ?
+                    (pay.payloads().isEmpty() ? null :
+                     pay.payloads().peek() instanceof UnitPayload p1 ? p1.unit :
+                     pay.payloads().peek() instanceof BuildPayload p2 ? p2.build : null) : null;
             default -> noSensed;
         };
     }
@@ -381,6 +393,11 @@ abstract class UnitComp implements Healthc, Physicsc, Hitboxc, Statusc, Teamc, I
             case flag -> flag = value;
             case speed -> statusSpeed(Mathf.clamp((float)value, 0f, 1000f));
             case armor -> statusArmor(Math.max((float)value, 0f));
+            case healthMultiplier -> statusHealthMultiplier((float)value);
+            case damageMultiplier -> statusDamageMultiplier((float)value);
+            case reloadMultiplier -> statusReloadMultiplier((float)value);
+            case buildSpeed -> statusBuildSpeed((float)value);
+            case buildSpeedMultiplier -> statusBuildSpeedMultiplier((float)value);
         }
     }
 

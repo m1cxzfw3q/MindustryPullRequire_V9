@@ -5,6 +5,7 @@ import arc.util.*;
 import mindustry.*;
 import mindustry.content.*;
 import mindustry.gen.*;
+import mindustry.logic.LogicProp;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.*;
@@ -70,6 +71,14 @@ public class Router extends Block{
                     lastItem = null;
                 }
             }
+        }
+
+        @Override
+        public Object senseObject(LogicProp sensor) {
+            return switch(sensor){
+                case name -> unit().getPlayer();
+                default -> super.senseObject(sensor);
+            };
         }
 
         @Override

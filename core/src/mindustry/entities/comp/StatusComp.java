@@ -152,6 +152,11 @@ abstract class StatusComp implements Posc{
         applyDynamicStatus().speedMultiplier = speed / (type.speed * 60f / tilesize);
     }
 
+    /** Uses a dynamic status effect to change health. */
+    public void statusHealthMultiplier(float healthMultiplier){
+        applyDynamicStatus().healthMultiplier = healthMultiplier;
+    }
+
     /** Uses a dynamic status effect to change damage. */
     public void statusDamageMultiplier(float damageMultiplier){
         applyDynamicStatus().damageMultiplier = damageMultiplier;
@@ -160,6 +165,11 @@ abstract class StatusComp implements Posc{
     /** Uses a dynamic status effect to change reload. */
     public void statusReloadMultiplier(float reloadMultiplier){
         applyDynamicStatus().reloadMultiplier = reloadMultiplier;
+    }
+
+    /** Uses a dynamic status effect to change build speed. */
+    public void statusBuildSpeedMultiplier(float buildSpeedMultiplier){
+        applyDynamicStatus().buildSpeedMultiplier = buildSpeedMultiplier;
     }
 
     /** Uses a dynamic status effect to override max health. */
